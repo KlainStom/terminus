@@ -1,0 +1,2 @@
+# terminus
+Better minestom console
