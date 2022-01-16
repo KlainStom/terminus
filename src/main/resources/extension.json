@@ -1,0 +1,16 @@
+{
+  "entrypoint": "$com.github.klainstom.${name.toLowerCase()}.ExtensionMain",
+  "name": "${name}",
+  "version": "${version}",
+  "dependencies": [
+
+  ],
+  "externalDependencies": {
+    "repositories": [
+
+    ],
+    "artifacts": [
+
+    ]
+  }
+}
