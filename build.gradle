@@ -34,7 +34,7 @@ blossom {
 }
 
 processResources.expand(
-    'Name': displayName,
+    'name': displayName,
     'version': version
 )
 

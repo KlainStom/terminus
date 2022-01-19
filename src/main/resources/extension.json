@@ -1,5 +1,5 @@
 {
-  "entrypoint": "$com.github.klainstom.${name.toLowerCase()}.ExtensionMain",
+  "entrypoint": "com.github.klainstom.${name.toLowerCase()}.ExtensionMain",
   "name": "${name}",
   "version": "${version}",
   "dependencies": [
