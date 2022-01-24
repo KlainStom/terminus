@@ -2,6 +2,9 @@ package com.github.klainstom.terminus.sshd;
 
 import com.github.klainstom.terminus.ExtensionMain;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.ConsoleSender;
+import net.minestom.server.command.builder.CommandResult;
 import org.apache.sshd.common.mac.MacInformation;
 import org.apache.sshd.server.Environment;
 import org.apache.sshd.server.ExitCallback;
@@ -22,6 +25,9 @@ import java.util.concurrent.TimeUnit;
 
 public class TerminusShell implements Command, Runnable {
     private final ChannelSession channelSession;
+    private CommandSender commandSender;
+    private Terminal terminal;
+    private LineReader reader;
 
     private ExitCallback exitCallback;
 
@@ -58,7 +64,17 @@ public class TerminusShell implements Command, Runnable {
     }
 
     @Override
-    public void start(ChannelSession channel, Environment env) {
+    public void start(ChannelSession channel, Environment env) throws IOException {
+        this.terminal = TerminalBuilder.builder()
+                .system(false)
+                .streams(in, out)
+                .jansi(false).jna(false) // TODO: 23.01.22 fix error with enabled jansi
+                .build();
+        this.reader = LineReaderBuilder.builder()
+                .terminal(terminal)
+                .build();
+        this.commandSender = new SshdSender(terminal);
+
         MinecraftServer.LOGGER.info("Open Shell...");
         (thread = new Thread(this)).start();
     }
@@ -72,50 +88,43 @@ public class TerminusShell implements Command, Runnable {
 
     @Override
     public void run() {
-        MinecraftServer.LOGGER.info("Start shell thread...");
-        // FIXME: 22.01.22 undefined symbol openpty
-        try {
-            MinecraftServer.LOGGER.info("TerminalBuilder");
-            TerminalBuilder builder = TerminalBuilder.builder()
-                    .system(false)
-                    .streams(in, out)
-                    .jansi(false).jna(false); // TODO: 23.01.22 fix error with enabled jansi
-            MinecraftServer.LOGGER.info("Terminal");
-            Terminal terminal = builder.build();
-            MinecraftServer.LOGGER.info("LineReader");
-            LineReader reader = LineReaderBuilder.builder()
-                    .terminal(terminal)
-                    .build();
+        terminal.writer().println("Terminos SSHD");
 
-            terminal.writer().println("Terminos SSHD");
+        String line;
+        while (running) {
+            try { line = reader.readLine("=> "); }
+            catch (UserInterruptException ignored) { continue; }
+            catch (EndOfFileException ignored) { break; }
+            if (line == null) break;
+            if (line.isBlank()) continue;
 
-            terminal.resume();
-            String line;
-            while (running) {
-                try { line = reader.readLine("=> "); }
-                catch (UserInterruptException ignored) { continue; }
-                catch (EndOfFileException ignored) { break; }
-                if (line == null) break;
+            executeCommand(line);
+        }
 
-                switch (line) {
-                    case "" -> { }
-                    case "exit" -> running = false;
-                    case "uptime", "up" -> {
-                        long period = System.currentTimeMillis() - ExtensionMain.START_TIME;
-                        long D = TimeUnit.MILLISECONDS.toDays(period);
-                        long HH = TimeUnit.MILLISECONDS.toHours(period) % 24;
-                        long MM = TimeUnit.MILLISECONDS.toMinutes(period) % 60;
-                        long SS = TimeUnit.MILLISECONDS.toSeconds(period) % 60;
-                        terminal.writer().printf("Up %d days %02d:%02d:%02d\n", D, HH, MM, SS);
-                    }
-                    default -> terminal.writer().println("Unknown command: "+line); // execute as minestom command
+        exitCallback.onExit(0);
+        channelSession.getSession().close(true);
+    }
+
+    public void executeCommand(String command) {
+        switch (command) {
+            case "exit" -> running = false;
+            case "uptime", "up" -> {
+                long period = System.currentTimeMillis() - ExtensionMain.START_TIME;
+                long D = TimeUnit.MILLISECONDS.toDays(period);
+                long HH = TimeUnit.MILLISECONDS.toHours(period) % 24;
+                long MM = TimeUnit.MILLISECONDS.toMinutes(period) % 60;
+                long SS = TimeUnit.MILLISECONDS.toSeconds(period) % 60;
+                terminal.writer().printf("Up %d days %02d:%02d:%02d\n", D, HH, MM, SS);
+            }
+            default -> {
+                CommandResult result = MinecraftServer.getCommandManager().execute(commandSender, command);
+                switch (result.getType()) {
+                    case UNKNOWN -> terminal.writer().printf("Unknown command: %s\n", result.getInput());
+                    case INVALID_SYNTAX -> terminal.writer().printf("Invalid command syntax: %s\n", result.getInput());
+                    case CANCELLED -> terminal.writer().printf("Command was cancelled: %s\n", result.getInput());
+                    case SUCCESS -> terminal.writer().println("Successfully executed.");
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            exitCallback.onExit(0);
-            channelSession.getSession().close(true);
         }
     }
 }
