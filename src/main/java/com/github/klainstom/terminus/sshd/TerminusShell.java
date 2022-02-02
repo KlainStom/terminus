@@ -86,7 +86,7 @@ public class TerminusShell implements Command, Runnable {
 
     @Override
     public void run() {
-        terminal.writer().println("Terminos SSHD");
+        print("==== Terminos SSHD ====");
 
         String line;
         while (running) {
@@ -112,18 +112,20 @@ public class TerminusShell implements Command, Runnable {
                 long HH = TimeUnit.MILLISECONDS.toHours(period) % 24;
                 long MM = TimeUnit.MILLISECONDS.toMinutes(period) % 60;
                 long SS = TimeUnit.MILLISECONDS.toSeconds(period) % 60;
-                terminal.writer().printf("Up %d days %02d:%02d:%02d\n", D, HH, MM, SS);
+                print("Up %d days %02d:%02d:%02d\n".formatted(D, HH, MM, SS));
             }
             default -> {
                 CommandResult result = COMMAND_MANAGER.execute(
                         COMMAND_MANAGER.getConsoleSender(), command);
                 switch (result.getType()) {
-                    case UNKNOWN -> terminal.writer().printf("Unknown command: %s\n", result.getInput());
-                    case INVALID_SYNTAX -> terminal.writer().printf("Invalid command syntax: %s\n", result.getInput());
-                    case CANCELLED -> terminal.writer().printf("Command was cancelled: %s\n", result.getInput());
-                    case SUCCESS -> terminal.writer().println("Successfully executed.");
+                    case UNKNOWN -> print("Unknown command: %s\n".formatted(result.getInput()));
+                    case INVALID_SYNTAX -> print("Invalid command syntax: %s\n".formatted(result.getInput()));
+                    case CANCELLED -> print("Command was cancelled: %s\n".formatted(result.getInput()));
+                    case SUCCESS -> print("Successfully executed.");
                 }
             }
         }
     }
+
+    public void print(String line) { reader.printAbove(line); }
 }
