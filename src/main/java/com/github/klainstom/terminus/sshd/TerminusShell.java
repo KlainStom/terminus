@@ -1,6 +1,5 @@
 package com.github.klainstom.terminus.sshd;
 
-import com.github.klainstom.terminus.ExtensionMain;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.builder.CommandResult;
@@ -19,7 +18,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 public class TerminusShell implements Command, Runnable {
     public static final Set<String> SHELL_COMMANDS = Set.of("exit");
@@ -72,7 +70,7 @@ public class TerminusShell implements Command, Runnable {
         this.terminal = TerminalBuilder.builder()
                 .system(false)
                 .streams(in, out)
-                .jansi(false).jna(false) // TODO: 23.01.22 fix error with enabled jansi
+                .jansi(false)
                 .build();
         this.reader = LineReaderBuilder.builder()
                 .terminal(terminal)
