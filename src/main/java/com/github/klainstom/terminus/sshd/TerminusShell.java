@@ -73,13 +73,13 @@ public class TerminusShell implements Command, Runnable {
                 .terminal(terminal)
                 .build();
 
-        MinecraftServer.LOGGER.info("Open Shell...");
+        MinecraftServer.LOGGER.info("Open Shell for {}", channel.getSession().getUsername());
         (thread = new Thread(this)).start();
     }
 
     @Override
     public void destroy(ChannelSession channel) throws Exception {
-        MinecraftServer.LOGGER.info("Destroy shell...");
+        MinecraftServer.LOGGER.info("Close Shell for {}", channel.getSession().getUsername());
         running = false;
         thread.join();
     }
