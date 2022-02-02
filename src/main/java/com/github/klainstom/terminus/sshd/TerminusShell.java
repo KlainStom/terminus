@@ -20,7 +20,7 @@ import java.io.PrintStream;
 import java.util.Set;
 
 public class TerminusShell implements Command, Runnable {
-    public static final Set<String> SHELL_COMMANDS = Set.of("exit");
+    public static final Set<String> SHELL_COMMANDS = Set.of("exit", "whoami");
     private static final CommandManager COMMAND_MANAGER = MinecraftServer.getCommandManager();
 
     private final ChannelSession channelSession;
@@ -115,6 +115,7 @@ public class TerminusShell implements Command, Runnable {
         if (SHELL_COMMANDS.contains(words[0]))
             switch (words[0]) {
                 case "exit" -> running = false;
+                case "whoami" -> print(channelSession.getSession().getUsername());
             }
         else {
             CommandResult result = COMMAND_MANAGER.execute(
