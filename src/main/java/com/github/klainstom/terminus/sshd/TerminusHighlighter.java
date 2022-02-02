@@ -23,7 +23,9 @@ public class TerminusHighlighter implements Highlighter {
         for (int index = 0; index < words.length; index++) {
             AttributedStyle style = AttributedStyle.DEFAULT;
             if (index == 0) {
-                if (MinecraftServer.getCommandManager().commandExists(words[0]))
+                if (TerminusShell.SHELL_COMMANDS.contains(words[0]))
+                    style = AttributedStyle.DEFAULT.foreground(AttributedStyle.MAGENTA);
+                else if (MinecraftServer.getCommandManager().commandExists(words[0]))
                     style = AttributedStyle.DEFAULT.foreground(AttributedStyle.CYAN);
             }
             builder.append(new AttributedString(words[index]+" ", style));
