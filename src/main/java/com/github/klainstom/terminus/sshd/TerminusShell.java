@@ -93,7 +93,7 @@ public class TerminusShell implements Command, Runnable {
 
     @Override
     public void run() {
-        print("==== Terminos SSHD ====");
+        print("==== Terminus ====");
 
         String line;
         while (running) {
