@@ -8,10 +8,9 @@ import org.apache.sshd.server.Environment;
 import org.apache.sshd.server.ExitCallback;
 import org.apache.sshd.server.channel.ChannelSession;
 import org.apache.sshd.server.command.Command;
-import org.jline.reader.EndOfFileException;
-import org.jline.reader.LineReader;
-import org.jline.reader.LineReaderBuilder;
-import org.jline.reader.UserInterruptException;
+import org.jline.reader.*;
+import org.jline.reader.impl.DefaultExpander;
+import org.jline.reader.impl.history.DefaultHistory;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
@@ -19,9 +18,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class TerminusShell implements Command, Runnable {
+    public static final Set<String> SHELL_COMMANDS = Set.of("exit");
     private static final CommandManager COMMAND_MANAGER = MinecraftServer.getCommandManager();
 
     private final ChannelSession channelSession;
@@ -34,6 +35,10 @@ public class TerminusShell implements Command, Runnable {
     private PrintStream out;
     private InputStream in;
 
+    private final Highlighter highlighter = new TerminusHighlighter();
+    private final Completer completer = new TerminusCompleter();
+    private final Expander expander = new DefaultExpander();
+    private final History history = new DefaultHistory();
     private boolean running = true;
     private Thread thread;
 
@@ -71,6 +76,10 @@ public class TerminusShell implements Command, Runnable {
                 .build();
         this.reader = LineReaderBuilder.builder()
                 .terminal(terminal)
+                .highlighter(highlighter)
+                .completer(completer)
+                .expander(expander)
+                .history(history)
                 .build();
 
         MinecraftServer.LOGGER.info("Open Shell for {}", channel.getSession().getUsername());
