@@ -113,25 +113,19 @@ public class TerminusShell implements Command, Runnable {
     }
 
     public void executeCommand(String command) {
-        switch (command) {
-            case "exit" -> running = false;
-            case "uptime", "up" -> {
-                long period = System.currentTimeMillis() - ExtensionMain.START_TIME;
-                long D = TimeUnit.MILLISECONDS.toDays(period);
-                long HH = TimeUnit.MILLISECONDS.toHours(period) % 24;
-                long MM = TimeUnit.MILLISECONDS.toMinutes(period) % 60;
-                long SS = TimeUnit.MILLISECONDS.toSeconds(period) % 60;
-                print("Up %d days %02d:%02d:%02d\n".formatted(D, HH, MM, SS));
+        String[] words = command.split(" ");
+        if (SHELL_COMMANDS.contains(words[0]))
+            switch (words[0]) {
+                case "exit" -> running = false;
             }
-            default -> {
-                CommandResult result = COMMAND_MANAGER.execute(
-                        COMMAND_MANAGER.getConsoleSender(), command);
-                switch (result.getType()) {
-                    case UNKNOWN -> print("Unknown command: %s\n".formatted(result.getInput()));
-                    case INVALID_SYNTAX -> print("Invalid command syntax: %s\n".formatted(result.getInput()));
-                    case CANCELLED -> print("Command was cancelled: %s\n".formatted(result.getInput()));
-                    case SUCCESS -> print("Successfully executed.");
-                }
+        else {
+            CommandResult result = COMMAND_MANAGER.execute(
+                    COMMAND_MANAGER.getConsoleSender(), command);
+            switch (result.getType()) {
+                case UNKNOWN -> print("Unknown command: %s\n".formatted(result.getInput()));
+                case INVALID_SYNTAX -> print("Invalid command syntax: %s\n".formatted(result.getInput()));
+                case CANCELLED -> print("Command was cancelled: %s\n".formatted(result.getInput()));
+                case SUCCESS -> print("Successfully executed.");
             }
         }
     }
