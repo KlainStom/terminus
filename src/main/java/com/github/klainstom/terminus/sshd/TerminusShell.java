@@ -2,6 +2,7 @@ package com.github.klainstom.terminus.sshd;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.command.builder.CommandData;
 import net.minestom.server.command.builder.CommandResult;
 import org.apache.sshd.server.Environment;
 import org.apache.sshd.server.ExitCallback;
@@ -126,6 +127,12 @@ public class TerminusShell implements Command, Runnable {
                 case CANCELLED -> print("Command was cancelled: %s\n".formatted(result.getInput()));
                 case SUCCESS -> print("Successfully executed.");
             }
+            CommandData commandData = result.getCommandData();
+            if (commandData != null && !commandData.getDataMap().isEmpty()) {
+                for (String key : commandData.getDataMap().keySet()) {
+                    print(" - \"%s\": \"%s\"".formatted(key, commandData.get(key)));
+                }
+            } else print("No command data.");
         }
     }
 
