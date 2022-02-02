@@ -2,10 +2,8 @@ package com.github.klainstom.terminus.sshd;
 
 import com.github.klainstom.terminus.ExtensionMain;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.ConsoleSender;
+import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.builder.CommandResult;
-import org.apache.sshd.common.mac.MacInformation;
 import org.apache.sshd.server.Environment;
 import org.apache.sshd.server.ExitCallback;
 import org.apache.sshd.server.channel.ChannelSession;
@@ -24,8 +22,9 @@ import java.io.PrintStream;
 import java.util.concurrent.TimeUnit;
 
 public class TerminusShell implements Command, Runnable {
+    private static final CommandManager COMMAND_MANAGER = MinecraftServer.getCommandManager();
+
     private final ChannelSession channelSession;
-    private CommandSender commandSender;
     private Terminal terminal;
     private LineReader reader;
 
@@ -73,7 +72,6 @@ public class TerminusShell implements Command, Runnable {
         this.reader = LineReaderBuilder.builder()
                 .terminal(terminal)
                 .build();
-        this.commandSender = new SshdSender(terminal);
 
         MinecraftServer.LOGGER.info("Open Shell...");
         (thread = new Thread(this)).start();
@@ -117,7 +115,8 @@ public class TerminusShell implements Command, Runnable {
                 terminal.writer().printf("Up %d days %02d:%02d:%02d\n", D, HH, MM, SS);
             }
             default -> {
-                CommandResult result = MinecraftServer.getCommandManager().execute(commandSender, command);
+                CommandResult result = COMMAND_MANAGER.execute(
+                        COMMAND_MANAGER.getConsoleSender(), command);
                 switch (result.getType()) {
                     case UNKNOWN -> terminal.writer().printf("Unknown command: %s\n", result.getInput());
                     case INVALID_SYNTAX -> terminal.writer().printf("Invalid command syntax: %s\n", result.getInput());
