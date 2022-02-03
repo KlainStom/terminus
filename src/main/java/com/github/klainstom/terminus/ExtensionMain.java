@@ -18,7 +18,7 @@ public class ExtensionMain extends Extension {
             try {
                 Files.createDirectory(Settings.getTerminusDirectory());
             } catch (IOException e) {
-                MinecraftServer.LOGGER.info("Could not create terminus data directory", e);
+                MinecraftServer.LOGGER.error("Could not create terminus data directory", e);
             }
         }
         SSHD = SshServer.setUpDefaultServer();
