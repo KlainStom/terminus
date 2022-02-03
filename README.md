@@ -21,5 +21,6 @@ Works well with [Microstom](https://github.com/KlainStom/microstom).
 - a colored terminal (commands)
 
 ### Future features
+- settings (port, address, key files)
 - authentication (password, public key)
 - execution of single commands (without shell)
