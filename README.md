@@ -1,4 +1,4 @@
-# terminus
+## Terminus
 [![GitHub](https://img.shields.io/github/license/KlainStom/terminus?style=flat-square)](https://github.com/KlainStom/terminus/blob/master/LICENSE)
 [![GitHub Repo stars](https://img.shields.io/github/stars/KlainStom/terminus?style=flat-square)](https://github.com/KlainStom/terminus/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/KlainStom/terminus?style=flat-square)](https://github.com/KlainStom/terminus/network/members)
