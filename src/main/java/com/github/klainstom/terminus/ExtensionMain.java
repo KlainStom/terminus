@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 public class ExtensionMain extends Extension {
-    public static final long START_TIME = System.currentTimeMillis();
     private static final SshServer SSHD;
 
     static {
