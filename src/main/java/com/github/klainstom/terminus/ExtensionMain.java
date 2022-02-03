@@ -34,7 +34,6 @@ public class ExtensionMain extends Extension {
 
     @Override
     public void initialize() {
-        MinecraftServer.LOGGER.info("$name initialize.");
         for (String line : Settings.getSettingsLines()) {
             MinecraftServer.LOGGER.info(line);
         }
