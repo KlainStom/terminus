@@ -1,9 +1,7 @@
 package com.github.klainstom.terminus;
 
 import com.github.klainstom.terminus.sshd.TerminusShell;
-import com.github.klainstom.terminus.sshd.authentication.TerminusInteractiveAuth;
-import com.github.klainstom.terminus.sshd.authentication.TerminusPasswordAuth;
-import com.github.klainstom.terminus.sshd.authentication.TerminusPublickeyAuth;
+import com.github.klainstom.terminus.sshd.authentication.TerminusAuth;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extensions.Extension;
 import org.apache.sshd.server.SshServer;
@@ -28,9 +26,9 @@ public class ExtensionMain extends Extension {
         SSHD.setKeyPairProvider(new SimpleGeneratorHostKeyProvider(
                 Settings.getTerminusDirectory().resolve("host_key_pair")));
 
-        SSHD.setPublickeyAuthenticator(new TerminusPublickeyAuth());
-        SSHD.setPasswordAuthenticator(new TerminusPasswordAuth());
-        SSHD.setKeyboardInteractiveAuthenticator(new TerminusInteractiveAuth());
+        SSHD.setPublickeyAuthenticator(new TerminusAuth());
+        SSHD.setPasswordAuthenticator(new TerminusAuth());
+        SSHD.setKeyboardInteractiveAuthenticator(new TerminusAuth());
 
         SSHD.setShellFactory(TerminusShell::new);
         // SSHD.setCommandFactory();
