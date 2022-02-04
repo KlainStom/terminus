@@ -19,8 +19,9 @@ Works well with [Microstom](https://github.com/KlainStom/microstom).
 ### Features
 - `exit` and `whoami` shell commands
 - a colored terminal (commands)
+- authentication (password, public key)
+- settings (address, key file directory)
 
 ### Future features
-- settings (port, address, key files)
-- authentication (password, public key)
+- access restriction (based on IP)
 - execution of single commands (without shell)
