@@ -11,7 +11,7 @@ plugins {
 }
 
 def displayName = "Terminus"
-def minestomVersion = "54af9a7c960af4d308c6f56ac71c880be7689cae"
+def minestomVersion = "6716b21a4a62009a6db10075cc5b0a9d49bc775f"
 
 group 'com.github.klainstom'
 version '1.0-SNAPSHOT'
