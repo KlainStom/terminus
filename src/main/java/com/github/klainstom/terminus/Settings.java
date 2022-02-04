@@ -39,9 +39,7 @@ public class Settings {
 
     public static List<String> getSettingsLines() {
         return List.of(
-                "====== TERMINUS ======",
-                "Address: " + getServerIp() + ":" + getServerPort(),
-                "======================"
+                "Address: " + getServerIp() + ":" + getServerPort()
         );
     }
 

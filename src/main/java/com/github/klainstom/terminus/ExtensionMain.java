@@ -38,9 +38,10 @@ public class ExtensionMain extends Extension {
 
     @Override
     public void initialize() {
-        for (String line : Settings.getSettingsLines()) {
-            MinecraftServer.LOGGER.info(line);
-        }
+        MinecraftServer.LOGGER.info("====== TERMINUS ======");
+        Info.printVersionLines();
+        Info.printSettingsLines();
+        MinecraftServer.LOGGER.info("======================");
         try {
             SSHD.setHost(Settings.getServerIp());
             SSHD.setPort(Settings.getServerPort());
