@@ -22,16 +22,19 @@ public class TerminusAuth implements PublickeyAuthenticator, PasswordAuthenticat
 
     @Override
     public boolean authenticate(ServerSession session, String username, List<String> responses) throws Exception {
-        return Authentication.isCorrect(username, responses.get(0), session);
+        return AccessControl.isAllowed(username, AccessControl.AccessMethod.INTERACTIVE, session)
+                && Authentication.isCorrect(username, responses.get(0), session);
     }
 
     @Override
     public boolean authenticate(String username, String password, ServerSession session) throws PasswordChangeRequiredException, AsyncAuthException {
-        return Authentication.isCorrect(username, password, session);
+        return AccessControl.isAllowed(username, AccessControl.AccessMethod.PASSWORD, session)
+                && Authentication.isCorrect(username, password, session);
     }
 
     @Override
     public boolean authenticate(String username, PublicKey key, ServerSession session) throws AsyncAuthException {
-        return Authentication.isCorrect(username, key, session);
+        return AccessControl.isAllowed(username, AccessControl.AccessMethod.PUBLIC_KEY, session)
+                && Authentication.isCorrect(username, key, session);
     }
 }
