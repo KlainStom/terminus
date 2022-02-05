@@ -18,7 +18,7 @@ public class Authentication {
 
     private static volatile String PASS = "";
     private static volatile Set<PublicKey> KEYS = Set.of();
-    private static volatile long lastUpdate = 0;
+    private static volatile long nextUpdate = 0;
 
     public static boolean isCorrect(String username, String password, ServerSession session) {
         update();
@@ -31,8 +31,8 @@ public class Authentication {
     }
 
     private static void update() {
-        if (lastUpdate > System.currentTimeMillis()-10000) return;
-        lastUpdate = System.currentTimeMillis();
+        if (nextUpdate > System.currentTimeMillis()) return;
+        nextUpdate = System.currentTimeMillis() + 10000;
         try (BufferedReader reader = new BufferedReader(new FileReader(AUTHORIZED_KEYS.toFile()))) {
             List<PublicKeyEntry> publicKeyEntries = reader.lines().map(PublicKeyEntry::parsePublicKeyEntry).toList();
             KEYS = Set.copyOf(PublicKeyEntry.resolvePublicKeyEntries(null, publicKeyEntries, null));
