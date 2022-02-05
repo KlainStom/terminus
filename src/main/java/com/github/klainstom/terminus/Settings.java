@@ -47,11 +47,19 @@ public class Settings {
         private final String SSH_IP;
         private final int SSH_PORT;
 
+        private final String PUBLIC_KEY_SOURCE_IP;
+        private final String PASSWORD_SOURCE_IP;
+        private final String INTERACTIVE_SOURCE_IP;
+
         private final String TERMINUS_DIRECTORY;
 
         private SettingsState() {
             this.SSH_IP = "localhost";
             this.SSH_PORT = 2222;
+
+            this.PUBLIC_KEY_SOURCE_IP = "127.0.0.1/8";
+            this.PASSWORD_SOURCE_IP = "127.0.0.1/8";
+            this.INTERACTIVE_SOURCE_IP = "127.0.0.1/8";
 
             this.TERMINUS_DIRECTORY = "terminus/";
         }
@@ -60,6 +68,10 @@ public class Settings {
 
     public static String getServerIp() { return currentSettings.SSH_IP; }
     public static int getServerPort() { return currentSettings.SSH_PORT; }
+
+    public static String getPublicKeySourceIp() { return currentSettings.PUBLIC_KEY_SOURCE_IP; }
+    public static String getPasswordSourceIp() { return currentSettings.PASSWORD_SOURCE_IP; }
+    public static String getInteractiveSourceIp() { return currentSettings.INTERACTIVE_SOURCE_IP; }
 
     public static Path getTerminusDirectory() { return Path.of(currentSettings.TERMINUS_DIRECTORY); }
 }
