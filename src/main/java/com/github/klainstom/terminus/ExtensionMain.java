@@ -51,7 +51,6 @@ public class ExtensionMain extends Extension {
 
     @Override
     public void terminate() {
-        MinecraftServer.LOGGER.info("$name terminate.");
         try {
             if (SSHD.isStarted()) SSHD.stop();
         } catch (IOException e) {
