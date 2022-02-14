@@ -46,6 +46,7 @@ public class ExtensionMain extends Extension {
             SSHD.start();
         } catch (IOException e) {
             MinecraftServer.LOGGER.error("SSHD couldn't start.", e);
+            e.printStackTrace();
         }
     }
 
