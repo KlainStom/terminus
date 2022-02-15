@@ -46,16 +46,19 @@ public class ExtensionMain extends Extension {
             SSHD.start();
         } catch (IOException e) {
             MinecraftServer.LOGGER.error("SSHD couldn't start.", e);
+            e.printStackTrace();
         }
     }
 
     @Override
     public void terminate() {
-        MinecraftServer.LOGGER.info("$name terminate.");
-        try {
-            if (SSHD.isStarted()) SSHD.stop();
-        } catch (IOException e) {
-            MinecraftServer.LOGGER.error("SSHD couldn't stop correctly.", e);
-        }
+        SSHD.getActiveSessions().forEach(session -> {
+            try {
+                session.disconnect(11, "Server shutdown.");
+            } catch (IOException e) {
+                MinecraftServer.LOGGER.error("Couldn't cleanly disconnect client.", e);
+                e.printStackTrace();
+            }
+        });
     }
 }

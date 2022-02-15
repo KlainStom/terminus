@@ -3,7 +3,6 @@
 [![GitHub Repo stars](https://img.shields.io/github/stars/KlainStom/terminus?style=flat-square)](https://github.com/KlainStom/terminus/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/KlainStom/terminus?style=flat-square)](https://github.com/KlainStom/terminus/network/members)
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/KlainStom/terminus?style=flat-square)](https://github.com/KlainStom/terminus/releases/latest)
-[![Lines of code](https://img.shields.io/tokei/lines/github/KlainStom/terminus?style=flat-square)](https://github.com/KlainStom/terminus)
 [![GitHub all releases](https://img.shields.io/github/downloads/KlainStom/terminus/total?style=flat-square)](https://github.com/KlainStom/terminus/releases)
 
 [![GitHub last commit](https://img.shields.io/github/last-commit/KlainStom/terminus?style=flat-square)](https://github.com/KlainStom/terminus/commits/master)
