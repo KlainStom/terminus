@@ -23,10 +23,10 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.Minestom:Minestom:' + minestomVersion
+    compileOnly 'com.github.Minestom:Minestom:' + minestomVersion
 
-    implementation "org.jline:jline:3.21.0"
-    implementation "org.jline:jline-terminal-jansi:3.21.0"
+    compileOnly "org.jline:jline:3.21.0"
+    compileOnly "org.jline:jline-terminal-jansi:3.21.0"
     implementation 'org.apache.sshd:sshd-core:2.8.0'
 }
 
