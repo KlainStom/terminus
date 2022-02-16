@@ -1,11 +1,14 @@
 package com.github.klainstom.terminus.sshd.authentication;
 
-import com.github.klainstom.terminus.Settings;
+import com.github.klainstom.terminus.ExtensionMain;
 import net.minestom.server.MinecraftServer;
 import org.apache.sshd.common.config.keys.PublicKeyEntry;
 import org.apache.sshd.server.session.ServerSession;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.security.GeneralSecurityException;
 import java.security.PublicKey;
@@ -13,8 +16,8 @@ import java.util.List;
 import java.util.Set;
 
 public class Authentication {
-    private static final Path AUTHORIZED_KEYS = Settings.getTerminusDirectory().resolve("authorized_keys");
-    private static final Path PASSWORD = Settings.getTerminusDirectory().resolve("password");
+    private static final Path AUTHORIZED_KEYS = ExtensionMain.DATA_DIRECTORY.resolve("authorized_keys");
+    private static final Path PASSWORD = ExtensionMain.DATA_DIRECTORY.resolve("password");
 
     private static volatile String PASS = "";
     private static volatile Set<PublicKey> KEYS = Set.of();

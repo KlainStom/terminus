@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.*;
-import java.nio.file.Path;
 import java.util.List;
 
 public class Settings {
@@ -12,7 +11,7 @@ public class Settings {
             .setPrettyPrinting()
             .serializeNulls()
             .create();
-    private static final File settingsFile = new File("terminus-settings.json");
+    private static final File settingsFile = ExtensionMain.DATA_DIRECTORY.resolve("settings.json").toFile();
 
     private static SettingsState currentSettings = null;
 
@@ -47,19 +46,13 @@ public class Settings {
         private final String SSH_IP;
         private final int SSH_PORT;
 
-        private final String TERMINUS_DIRECTORY;
-
         private SettingsState() {
             this.SSH_IP = "localhost";
             this.SSH_PORT = 2222;
-
-            this.TERMINUS_DIRECTORY = "terminus/";
         }
 
     }
 
     public static String getServerIp() { return currentSettings.SSH_IP; }
     public static int getServerPort() { return currentSettings.SSH_PORT; }
-
-    public static Path getTerminusDirectory() { return Path.of(currentSettings.TERMINUS_DIRECTORY); }
 }
