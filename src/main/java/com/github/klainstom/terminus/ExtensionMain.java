@@ -9,33 +9,41 @@ import org.apache.sshd.server.keyprovider.SimpleGeneratorHostKeyProvider;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Objects;
 
 public class ExtensionMain extends Extension {
-    private static final SshServer SSHD;
+    public static Path DATA_DIRECTORY;
 
-    static {
-        Settings.read();
-        if (!Settings.getTerminusDirectory().toFile().exists()) {
+    private final SshServer SSHD = SshServer.setUpDefaultServer();
+
+    @Override
+    public void preInitialize() {
+         DATA_DIRECTORY = Objects.requireNonNull(MinecraftServer.getExtensionManager()
+                 .getExtension("$Name"), "Extension installed but not found!").getDataDirectory();
+
+        if (!DATA_DIRECTORY.toFile().exists()) {
             try {
-                Files.createDirectory(Settings.getTerminusDirectory());
+                Files.createDirectory(DATA_DIRECTORY);
             } catch (IOException e) {
                 MinecraftServer.LOGGER.error("Could not create terminus data directory", e);
+                e.printStackTrace();
             }
         }
-        SSHD = SshServer.setUpDefaultServer();
-        SSHD.setKeyPairProvider(new SimpleGeneratorHostKeyProvider(
-                Settings.getTerminusDirectory().resolve("host_key_pair")));
+    }
 
+    @Override
+    public void initialize() {
+        Settings.read();
+        SSHD.setKeyPairProvider(new SimpleGeneratorHostKeyProvider(
+                this.getDataDirectory().resolve("host_key_pair")));
         SSHD.setPublickeyAuthenticator(new TerminusAuth());
         SSHD.setPasswordAuthenticator(new TerminusAuth());
         SSHD.setKeyboardInteractiveAuthenticator(new TerminusAuth());
 
         SSHD.setShellFactory(TerminusShell::new);
         // SSHD.setCommandFactory();
-    }
 
-    @Override
-    public void initialize() {
         MinecraftServer.LOGGER.info("====== TERMINUS ======");
         Info.printVersionLines();
         Info.printSettingsLines();

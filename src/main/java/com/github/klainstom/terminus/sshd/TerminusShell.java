@@ -24,6 +24,7 @@ public class TerminusShell implements Command, Runnable {
     public static final Set<String> SHELL_COMMANDS = Set.of("exit", "whoami");
     private static final CommandManager COMMAND_MANAGER = MinecraftServer.getCommandManager();
 
+    private final TerminusSender terminusSender;
     private final ChannelSession channelSession;
     private Terminal terminal;
     private LineReader reader;
@@ -44,6 +45,7 @@ public class TerminusShell implements Command, Runnable {
 
     public TerminusShell(ChannelSession channelSession) {
         this.channelSession = channelSession;
+        this.terminusSender = new TerminusSender(this);
     }
 
     @Override
@@ -119,8 +121,7 @@ public class TerminusShell implements Command, Runnable {
                 case "whoami" -> print(channelSession.getSession().getUsername());
             }
         else {
-            CommandResult result = COMMAND_MANAGER.execute(
-                    COMMAND_MANAGER.getConsoleSender(), command);
+            CommandResult result = COMMAND_MANAGER.execute(terminusSender, command);
             switch (result.getType()) {
                 case UNKNOWN -> print("Unknown command: %s\n".formatted(result.getInput()));
                 case INVALID_SYNTAX -> print("Invalid command syntax: %s\n".formatted(result.getInput()));

@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.*;
-import java.nio.file.Path;
 import java.util.List;
 
 public class Settings {
@@ -12,7 +11,7 @@ public class Settings {
             .setPrettyPrinting()
             .serializeNulls()
             .create();
-    private static final File settingsFile = new File("terminus-settings.json");
+    private static final File settingsFile = ExtensionMain.DATA_DIRECTORY.resolve("settings.json").toFile();
 
     private static SettingsState currentSettings = null;
 
@@ -51,8 +50,6 @@ public class Settings {
         private final String PASSWORD_SOURCE_IP;
         private final String INTERACTIVE_SOURCE_IP;
 
-        private final String TERMINUS_DIRECTORY;
-
         private SettingsState() {
             this.SSH_IP = "localhost";
             this.SSH_PORT = 2222;
@@ -60,8 +57,6 @@ public class Settings {
             this.PUBLIC_KEY_SOURCE_IP = "127.0.0.1/8";
             this.PASSWORD_SOURCE_IP = "127.0.0.1/8";
             this.INTERACTIVE_SOURCE_IP = "127.0.0.1/8";
-
-            this.TERMINUS_DIRECTORY = "terminus/";
         }
 
     }
@@ -72,6 +67,4 @@ public class Settings {
     public static String getPublicKeySourceIp() { return currentSettings.PUBLIC_KEY_SOURCE_IP; }
     public static String getPasswordSourceIp() { return currentSettings.PASSWORD_SOURCE_IP; }
     public static String getInteractiveSourceIp() { return currentSettings.INTERACTIVE_SOURCE_IP; }
-
-    public static Path getTerminusDirectory() { return Path.of(currentSettings.TERMINUS_DIRECTORY); }
 }
