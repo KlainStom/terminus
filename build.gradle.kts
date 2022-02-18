@@ -9,12 +9,6 @@ var displayName = "Terminus"
 group = "com.github.klainstom"
 version = "1.1-SNAPSHOT"
 
-repositories {
-    mavenCentral()
-    maven("https://repo.spongepowered.org/maven")
-    maven("https://jitpack.io")
-}
-
 dependencies {
     compileOnly(libs.minestom)
 
