@@ -20,7 +20,7 @@ public class ExtensionMain extends Extension {
     @Override
     public void preInitialize() {
          DATA_DIRECTORY = Objects.requireNonNull(MinecraftServer.getExtensionManager()
-                 .getExtension("$Name"), "Extension installed but not found!").getDataDirectory();
+                 .getExtension("&Name"), "Extension installed but not found!").getDataDirectory();
 
         if (!DATA_DIRECTORY.toFile().exists()) {
             try {
@@ -44,7 +44,7 @@ public class ExtensionMain extends Extension {
         SSHD.setShellFactory(TerminusShell::new);
         // SSHD.setCommandFactory();
 
-        MinecraftServer.LOGGER.info("====== TERMINUS ======");
+        MinecraftServer.LOGGER.info("====== &NAME ======");
         Info.printVersionLines();
         Info.printSettingsLines();
         MinecraftServer.LOGGER.info("======================");
