@@ -2,15 +2,13 @@
   "entrypoint": "com.github.klainstom.${name.toLowerCase()}.ExtensionMain",
   "name": "${name}",
   "version": "${version}",
-  "dependencies": [
-
-  ],
-  "externalDependencies": {
-    "repositories": [
-
-    ],
-    "artifacts": [
-
-    ]
+  "meta": {
+    "github": {
+      "release": {
+        "account": "KlainStom",
+        "repo": "terminus",
+        "release": "v${version}"
+      }
+    }
   }
 }
