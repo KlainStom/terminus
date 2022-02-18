@@ -9,6 +9,7 @@ jline = "3.21.0"
 
 # SSHD
 sshd = "2.8.0"
+ipaddress = "5.3.3"
 
 # Gradle plugins
 blossom = "1.3.0"
@@ -19,6 +20,7 @@ shadowJar = "7.0.0"
 minestom = { group = "com.github.Minestom", name = "Minestom", version.ref = "minestom" }
 
 sshd = { group = "org.apache.sshd", name = "sshd-core", version.ref = "sshd" }
+ipaddress = { group = "com.github.seancfoley", name = "ipaddress", version.ref = "ipaddress" }
 
 # Terminal
 jline = { group = "org.jline", name = "jline", version.ref = "jline" }

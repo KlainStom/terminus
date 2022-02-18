@@ -14,6 +14,7 @@ dependencies {
 
     compileOnly(libs.bundles.terminal)
     implementation(libs.sshd)
+    implementation(libs.ipaddress)
 }
 
 tasks {
